@@ -5,12 +5,11 @@
         <div class="col-md-5 mx-auto">
             <div class="bg-white shadow rounded overflow-hidden">
                 <div class="px-4 pt-4 pb-4 cover">
-                    @if($errors->any())
-                        <div class="alert alert-danger" role="alert">
+                    @if(strpos(URL::previous(), '/email/verify/'))
+                        <div class="alert alert-success" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            @foreach ($errors->all() as $error)
-                                <h4><i class="icon fa fa-check"></i>{{ $error }}</h4>
-                            @endforeach
+                            <h4><i class="icon fa fa-check"></i>Вы подтвердили Ваш електронный адресс, <a href="{{ route('login') }}">авторизируйтесь</a>
+                            </h4>
                         </div>
                     @endif
 

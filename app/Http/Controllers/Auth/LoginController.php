@@ -40,4 +40,21 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+
+        if (!User::where('email', $request->email)->first()->email_verified_at) {
+            return redirect()->back()->withSuccess('Подтвердите почту, для авторизации');
+        }
+
+        if ($this->attemptLogin($request)) {
+            return $this->sendLoginResponse($request);
+        }
+
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
+    }
 }

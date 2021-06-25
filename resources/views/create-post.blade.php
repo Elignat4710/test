@@ -26,6 +26,19 @@
                             <textarea class="form-control" id="body" rows="3" placeholder="Пишите тут..."
                                       name="body"></textarea>
                         </div>
+                        <div class="form-group">
+                            <label for="category">Категория</label>
+                            <input type="text" class="form-control" list="category_name" id="category" name="category_name" autocomplete="off">
+                        </div>
+
+                        <datalist id="category_name">
+                            <option value="Chocolate">
+                            <option value="Coconut">
+                            <option value="Mint">
+                            <option value="Strawberry">
+                            <option value="Vanilla">
+                        </datalist>
+
                         <button type="submit" class="btn btn-primary">Создать пост</button>
                     </form>
                 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,11 +60,21 @@ class PageController extends Controller
     public function createPost(Request $request)
     {
         $model = new Post;
+        $category = Category::firstOrCreate(['name' => $request->category_name]);
 
-        $model->fill($request->all());
+        $array = array_merge($request->all(), ['category_id' => $category->id]);
+
+        $model->fill($array);
         $model->save();
 
         return redirect()->back()->withSuccess('Пост создан успешно');
+    }
+
+    public function getCategory(Request $request)
+    {
+        return response()->json([
+            'models' => Category::search($request->search)->get()
+        ]);
     }
 
     public function showUpdatePost($user_id, $post_id)

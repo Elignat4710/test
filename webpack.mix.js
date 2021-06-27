@@ -17,4 +17,5 @@ mix.js('resources/js/app.js', 'public/js')
     .copy('resources/image', 'public/image')
     .js('resources/js/profile.js', 'public/js/')
     .js('resources/js/posts.js', 'public/js')
+    .js('resources/js/create-post.js', 'public/js')
     .sourceMaps();

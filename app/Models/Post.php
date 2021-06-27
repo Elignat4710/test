@@ -12,7 +12,8 @@ class Post extends Model
     public $fillable = [
         'user_id',
         'title',
-        'body'
+        'body',
+        'category_id'
     ];
 
     public function user()

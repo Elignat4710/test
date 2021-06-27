@@ -32,11 +32,6 @@
                         </div>
 
                         <datalist id="category_name">
-                            <option value="Chocolate">
-                            <option value="Coconut">
-                            <option value="Mint">
-                            <option value="Strawberry">
-                            <option value="Vanilla">
                         </datalist>
 
                         <button type="submit" class="btn btn-primary">Создать пост</button>
@@ -45,4 +40,8 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script src="{{ 'js/create-post.js' }}"></script>
 @endsection

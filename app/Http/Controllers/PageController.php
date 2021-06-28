@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
@@ -59,6 +60,7 @@ class PageController extends Controller
 
     public function createPost(Request $request)
     {
+        $tags = json_decode($request->tag);
         $model = new Post;
         $category = Category::firstOrCreate(['name' => $request->category_name]);
 
@@ -67,6 +69,11 @@ class PageController extends Controller
         $model->fill($array);
         $model->save();
 
+        foreach ($tags as $tag) {
+            $tagModel = Tag::firstOrCreate(['name' => $tag]);
+            $model->tags()->attach($tagModel);
+        }
+
         return redirect()->back()->withSuccess('Пост создан успешно');
     }
 
@@ -74,6 +81,13 @@ class PageController extends Controller
     {
         return response()->json([
             'models' => Category::search($request->search)->get()
+        ]);
+    }
+
+    public function getTag(Request $request)
+    {
+        return response()->json([
+            'models' => Tag::search($request->search)->get()
         ]);
     }
 

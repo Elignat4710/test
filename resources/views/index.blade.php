@@ -8,10 +8,23 @@
                     @if(strpos(URL::previous(), '/email/verify/'))
                         <div class="alert alert-success" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            <h4><i class="icon fa fa-check"></i>Вы подтвердили Ваш електронный адресс, <a href="{{ route('login') }}">авторизируйтесь</a>
+                            <h4><i class="icon fa fa-check"></i>Вы подтвердили Ваш електронный адресс, <a
+                                    href="{{ route('login') }}">авторизируйтесь</a>
                             </h4>
                         </div>
                     @endif
+
+                    <form action="" class="mb-4">
+                        <div class="form-group">
+                            <label for="">Поиск по тегу</label>
+                            <input class="form-control" type="text" list="tags-name">
+                        </div>
+                        <button class="btn btn-primary">Поиск</button>
+
+                        <datalist id="tags-name">
+                            <option value="test">
+                        </datalist>
+                    </form>
 
                     <h2 class="text-center">{{ $title }}: {{ $count }}</h2>
                     @foreach($posts as $post)
@@ -48,6 +61,15 @@
                                         <path fill-rule="evenodd"
                                               d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
                                     </svg>
+                                </div>
+                            </div>
+                            <div class="row mt-2 align-items-end">
+                                <div class="col-md-12">
+                                    <small class="font-italic mb-0 mr-3">Tags:
+                                        @foreach($post->tags as $tag)
+                                            {{ $tag->name }} |
+                                        @endforeach
+                                    </small>
                                 </div>
                             </div>
                         </div>

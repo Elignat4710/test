@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/create-post', [\App\Http\Controllers\PageController::class, 'createPost'])->name('create-post');
     Route::patch('/update-post', [\App\Http\Controllers\PageController::class, 'updatePost'])->name('update-post');
     Route::get('/search-category', [\App\Http\Controllers\PageController::class, 'getCategory'])->name('search-category');
+    Route::get('/search-tag', [\App\Http\Controllers\PageController::class, 'getTag'])->name('search-tag');
 });
 
 Auth::routes(['verify' => true]);

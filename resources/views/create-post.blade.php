@@ -28,10 +28,24 @@
                         </div>
                         <div class="form-group">
                             <label for="category">Категория</label>
-                            <input type="text" class="form-control" list="category_name" id="category" name="category_name" autocomplete="off">
+                            <input type="text" class="form-control" list="category_name" id="category"
+                                   name="category_name" autocomplete="off">
                         </div>
 
                         <datalist id="category_name">
+                        </datalist>
+
+                        <div class="form-group">
+                            <label for="tag">Теги</label>
+                            <input type="text" class="form-control" list="tags-name" id="tag"
+                                   autocomplete="off">
+                            <input type="hidden" name="tag" id="array-tag">
+                            <div id="tags-list">
+
+                            </div>
+                        </div>
+
+                        <datalist id="tags-name">
                         </datalist>
 
                         <button type="submit" class="btn btn-primary">Создать пост</button>

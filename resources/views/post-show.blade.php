@@ -15,7 +15,7 @@
                         </div>
 
                         <div class="col-md-6 text-right" style="right: 0">
-                            <small>100</small>
+                            <small>{{ $post->comments->count() }}</small>
                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chat-dots"
                                  fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd"
@@ -30,6 +30,15 @@
                                 <path fill-rule="evenodd"
                                       d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
                             </svg>
+                        </div>
+                    </div>
+                    <div class="row mt-2 align-items-end">
+                        <div class="col-md-12">
+                            <small class="font-italic mb-0 mr-3">Tags:
+                                @foreach($post->tags as $tag)
+                                    {{ $tag->name }} |
+                                @endforeach
+                            </small>
                         </div>
                     </div>
 

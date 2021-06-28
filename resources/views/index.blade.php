@@ -14,17 +14,19 @@
                         </div>
                     @endif
 
-                    <form action="" class="mb-4">
-                        <div class="form-group">
-                            <label for="">Поиск по тегу</label>
-                            <input class="form-control" type="text" list="tags-name">
-                        </div>
-                        <button class="btn btn-primary">Поиск</button>
+                    @if(Route::is('index'))
+                        <form method="get" class="mb-4" id="form">
+                            <div class="form-group">
+                                <label for="tag">Поиск по тегу</label>
+                                <input class="form-control" type="text" id="tag" name="tag" list="tags-name"
+                                       autocomplete="off">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Поиск</button>
 
-                        <datalist id="tags-name">
-                            <option value="test">
-                        </datalist>
-                    </form>
+                            <datalist id="tags-name">
+                            </datalist>
+                        </form>
+                    @endif
 
                     <h2 class="text-center">{{ $title }}: {{ $count }}</h2>
                     @foreach($posts as $post)
@@ -40,9 +42,8 @@
 
                                 <div class="col-md-6 text-right" style="right: 0">
                                     @if(Auth::check() && Auth::user()->id == $post->user->id)
-                                        <small><a
-                                                href="{{ route('show-update-post', [Auth::user()->id, $post->id]) }}"
-                                                class="mr-3">Редактировать</a></small>
+                                        <small><a href="{{ route('show-update-post', [Auth::user()->id, $post->id]) }}"
+                                                  class="mr-3">Редактировать</a></small>
                                     @endif
                                     <small><a href="{{ route('show-post', $post->id) }}"
                                               class="mr-3">Просмотреть</a></small>
@@ -56,7 +57,8 @@
                                     </svg>
                                     <small>{{ $post->likes }}</small>
                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-fill"
-                                         fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                         fill="currentColor"
+                                         xmlns="http://www.w3.org/2000/svg">
                                         <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
                                         <path fill-rule="evenodd"
                                               d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
@@ -74,9 +76,12 @@
                             </div>
                         </div>
                     @endforeach
-                    <div class="mt-4">
-                        {{ $posts->links() }}
-                    </div>
+
+                    @if(!request('tag'))
+                        <div class="mt-4">
+                            {{ $posts->links() }}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

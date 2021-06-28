@@ -30,14 +30,18 @@ class PageController extends Controller
 
             $title = 'Посты без комментариев';
         } else {
-            $posts = new Post;
+            if ($request->has('tag')) {
+                $tag = Tag::where('name', $request->tag)->first()->posts;
+            } else {
+                $posts = new Post();
+            }
             $title = 'Все посты';
         }
 
         return view('index', [
-            'posts' => $posts->paginate(15),
+            'posts' => isset($tag) ? $tag : $posts->paginate(15),
             'title' => $title,
-            'count' => $posts->count()
+            'count' => isset($tag) ? $tag->count() : $posts->count()
         ]);
     }
 

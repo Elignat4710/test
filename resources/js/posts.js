@@ -9,4 +9,35 @@ document.addEventListener('DOMContentLoaded', () => {
             bodyText[i].innerHTML = text
         }
     }
+
+    document.getElementById('tag').addEventListener('input', (e) => {
+        axios.get('/search-tag', {
+            params: {
+                search: e.target.value
+            }
+        })
+            .then((data) => {
+                let dataList = document.getElementById('tags-name')
+                dataList.innerHTML = ''
+                let string = ''
+
+                for (let i = 0; i < data.data.models.length; i++) {
+                    string += `<option value="${data.data.models[i].name}">`
+                }
+
+                dataList.insertAdjacentHTML('afterbegin', string)
+            })
+    })
+
+    document.getElementById('form').addEventListener('submit', (e) => {
+        let formData = new FormData(e.target)
+        let currentPath = window.location.href
+        axios.get(currentPath, {
+            params: {
+                filter: {
+                    tag: formData
+                }
+            }
+        })
+    })
 })

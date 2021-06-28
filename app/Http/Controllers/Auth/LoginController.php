@@ -41,6 +41,13 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     * Переопрежеленный метод авторизации
+     *
+     * @param Request $request
+     * @return JsonResponse|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function login(Request $request)
     {
         $this->validateLogin($request);

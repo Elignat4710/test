@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
+    /**
+     * Профиль авторизированого юзера
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function index()
     {
         return view('profile', [
@@ -15,6 +20,12 @@ class ProfileController extends Controller
         ]);
     }
 
+    /**
+     * Профиль юзера по айди
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function show($id)
     {
         return view('profile-detail', [
@@ -23,6 +34,12 @@ class ProfileController extends Controller
         ]);
     }
 
+    /**
+     * Обновление фотографии профиля
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function updateAvatar(Request $request)
     {
         if ($request->hasFile('avatar')) {

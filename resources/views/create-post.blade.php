@@ -19,17 +19,23 @@
                         <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                         <div class="form-group">
                             <label for="title">Заголовок</label>
-                            <input type="text" class="form-control" id="title" name="title">
+                            <input type="text" class="form-control" id="title" name="title" required>
+
+                            @error('title')
+                            <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="body">Тело поста</label>
                             <textarea class="form-control" id="body" rows="3" placeholder="Пишите тут..."
-                                      name="body"></textarea>
+                                      name="body" required></textarea>
                         </div>
                         <div class="form-group">
                             <label for="category">Категория</label>
                             <input type="text" class="form-control" list="category_name" id="category"
-                                   name="category_name" autocomplete="off">
+                                   name="category_name" autocomplete="off" required>
                         </div>
 
                         <datalist id="category_name">
@@ -39,7 +45,7 @@
                             <label for="tag">Теги</label>
                             <input type="text" class="form-control" list="tags-name" id="tag"
                                    autocomplete="off">
-                            <input type="hidden" name="tag" id="array-tag">
+                            <input type="hidden" name="tag" id="array-tag" required>
                             <div id="tags-list">
 
                             </div>

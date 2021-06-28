@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    /**
+     * Создание коммента
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function create(Request $request)
     {
         $model = new Comment;

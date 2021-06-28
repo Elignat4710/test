@@ -18,17 +18,47 @@
                         <input type="hidden" name="post_id" value="{{ $post->id }}">
                         <div class="form-group">
                             <label for="title">Заголовок</label>
-                            <input type="text" class="form-control" id="title" name="title" value="{{ $post->title }}">
+                            <input type="text" class="form-control" id="title" name="title" value="{{ $post->title }}"
+                                   required>
                         </div>
                         <div class="form-group">
                             <label for="body">Тело поста</label>
                             <textarea class="form-control" id="body" rows="3" placeholder="Пишите тут..."
-                                      name="body">{{ $post->body }}</textarea>
+                                      name="body" required>{{ $post->body }}</textarea>
                         </div>
+
+                        <div class="form-group">
+                            <label for="category">Категория</label>
+                            <input type="text" class="form-control" list="category_name" id="category"
+                                   name="category_name" autocomplete="off" required value="{{ $post->category->name }}">
+                        </div>
+
+                        <datalist id="category_name">
+                        </datalist>
+
+                        <div class="form-group">
+                            <label for="tag">Теги</label>
+                            <input type="text" class="form-control" list="tags-name" id="tag"
+                                   autocomplete="off">
+                            <input type="hidden" name="tag" id="array-tag" required>
+                            <div id="tags-list">
+                                @foreach($post->tags as $tag)
+                                    <span class="badge badge-pill badge-success mr-1">{{ $tag->name }}</span>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <datalist id="tags-name">
+                        </datalist>
+
                         <button type="submit" class="btn btn-primary">Обновить пост</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script src="{{ mix('js/update-post.js') }}"></script>
 @endsection

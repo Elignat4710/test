@@ -9,8 +9,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 
-class PageController extends Controller
+class PostController extends Controller
 {
+    /**
+     * Показ главной страницы, с разными параметрами
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function index(Request $request)
     {
         if (URL::current() == route('my-post')) {
@@ -45,6 +51,12 @@ class PageController extends Controller
         ]);
     }
 
+    /**
+     * Просмотреть пост
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function show($id)
     {
         $post = Post::where('id', $id)->first();
@@ -57,11 +69,22 @@ class PageController extends Controller
         ]);
     }
 
+    /**
+     * Показать вьюху для создания поста
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function showCreatePost()
     {
         return view('create-post');
     }
 
+    /**
+     * Создать пост
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function createPost(Request $request)
     {
         $tags = json_decode($request->tag);
@@ -81,20 +104,13 @@ class PageController extends Controller
         return redirect()->back()->withSuccess('Пост создан успешно');
     }
 
-    public function getCategory(Request $request)
-    {
-        return response()->json([
-            'models' => Category::search($request->search)->get()
-        ]);
-    }
-
-    public function getTag(Request $request)
-    {
-        return response()->json([
-            'models' => Tag::search($request->search)->get()
-        ]);
-    }
-
+    /**
+     * Показать вьюху для редактирования
+     *
+     * @param $user_id
+     * @param $post_id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function showUpdatePost($user_id, $post_id)
     {
         if (Auth::user()->id != $user_id) {
@@ -111,19 +127,34 @@ class PageController extends Controller
         ]);
     }
 
+    /**
+     * Обновить пост
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatePost(Request $request)
     {
         if (Auth::user()->id != $request->user_id) {
             return redirect()->route('index')->withErrors(['Не жульничай, не твой пост']);
         }
 
+        $tags = json_decode($request->tag);
+        $category = Category::firstOrCreate(['name' => $request->category_name]);
+        $array = array_merge($request->all(), ['category_id' => $category->id]);
+
         $model = Post::where([
             'id' => $request->post_id,
             'user_id' => $request->user_id
         ])->first();
 
-        $model->fill($request->all());
+        $model->fill($array);
         $model->save();
+
+        foreach ($tags as $tag) {
+            $tagModel = Tag::firstOrCreate(['name' => $tag]);
+            $model->tags()->attach($tagModel);
+        }
 
         return redirect()->back()->withSuccess('Пост успешно обновлен');
     }

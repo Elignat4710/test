@@ -79,7 +79,7 @@
 
                     @if(!request('tag'))
                         <div class="mt-4">
-                            {{ $posts->links() }}
+                            {{ $posts->withQueryString()->links() }}
                         </div>
                     @endif
                 </div>

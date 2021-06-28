@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const bodyText = document.querySelectorAll('.body-post')
 
+    // Сокражение содержания поста
     for (let i = 0; i < bodyText.length; i++) {
         let text = bodyText[i].textContent
 
@@ -10,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Автосаджест для поиска по тегам
     document.getElementById('tag').addEventListener('input', (e) => {
         axios.get('/search-tag', {
             params: {
@@ -29,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
     })
 
+    // Сабмит формы на фильтрацию по тегам
     document.getElementById('form').addEventListener('submit', (e) => {
         let formData = new FormData(e.target)
         let currentPath = window.location.href

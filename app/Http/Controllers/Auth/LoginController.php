@@ -52,10 +52,6 @@ class LoginController extends Controller
     {
         $this->validateLogin($request);
 
-        if (!User::where('email', $request->email)->first()->email_verified_at) {
-            return redirect()->back()->withSuccess('Подтвердите почту, для авторизации');
-        }
-
         if ($this->attemptLogin($request)) {
             return $this->sendLoginResponse($request);
         }

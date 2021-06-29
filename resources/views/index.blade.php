@@ -55,7 +55,7 @@
                                         <path
                                             d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
                                     </svg>
-                                    <small>{{ $post->likes }}</small>
+                                    <small>{{ $post->views }}</small>
                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-fill"
                                          fill="currentColor"
                                          xmlns="http://www.w3.org/2000/svg">

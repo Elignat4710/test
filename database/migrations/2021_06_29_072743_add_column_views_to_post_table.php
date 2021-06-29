@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnLikeToPostsTable extends Migration
+class AddColumnViewsToPostTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddColumnLikeToPostsTable extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->integer('likes')->default(0);
+            $table->integer('views')->default(0);
         });
     }
 
@@ -26,7 +26,7 @@ class AddColumnLikeToPostsTable extends Migration
     public function down()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->dropColumn('likes');
+            $table->dropColumn('views');
         });
     }
 }

@@ -59,9 +59,9 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::where('id', $id)->first();
+        $post = Post::find($id)->first();
 
-        $post->likes = $post->likes + 1;
+        $post->views = $post->views + 1;
         $post->save();
 
         return view('post-show', [
@@ -96,10 +96,12 @@ class PostController extends Controller
         $model->fill($array);
         $model->save();
 
+        $tagModel = [];
         foreach ($tags as $tag) {
-            $tagModel = Tag::firstOrCreate(['name' => $tag]);
-            $model->tags()->attach($tagModel);
+            $tagModel[] = Tag::firstOrCreate(['name' => $tag])->id;
         }
+
+        $model->tags()->sync($tagModel);
 
         return redirect()->back()->withSuccess('Пост создан успешно');
     }
@@ -150,11 +152,13 @@ class PostController extends Controller
 
         $model->fill($array);
         $model->save();
-
+        
+        $tagModel = [];
         foreach ($tags as $tag) {
-            $tagModel = Tag::firstOrCreate(['name' => $tag]);
-            $model->tags()->attach($tagModel);
+            $tagModel[] = Tag::firstOrCreate(['name' => $tag])->id;
         }
+
+        $model->tags()->sync($tagModel);
 
         return redirect()->back()->withSuccess('Пост успешно обновлен');
     }

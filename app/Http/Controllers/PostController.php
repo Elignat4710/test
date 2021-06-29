@@ -5,12 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Repos\Interfaces\PostRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 
 class PostController extends Controller
 {
+    protected $postModel;
+    
+    public function __construct(PostRepositoryInterface $postModel)
+    {
+        $this->postModel = $postModel;
+    }
+
     /**
      * Показ главной страницы, с разными параметрами
      *
@@ -39,7 +47,7 @@ class PostController extends Controller
             if ($request->has('tag')) {
                 $tag = Tag::where('name', $request->tag)->first()->posts;
             } else {
-                $posts = new Post();
+                $posts = $this->postModel->instance();
             }
             $title = 'Все посты';
         }

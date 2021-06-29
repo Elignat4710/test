@@ -176,6 +176,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         App\Providers\PostRepositoryServiceProvider::class,
+        App\Providers\CategoryRepositoryServiceProvider::class,
+        App\Providers\TagRepositoryServiceProvider::class
 
     ],
 

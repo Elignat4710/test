@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Post;
-use App\Models\Tag;
+use App\Repos\Interfaces\CategoryRepositoryInterface;
 use App\Repos\Interfaces\PostRepositoryInterface;
+use App\Repos\Interfaces\TagRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
@@ -13,10 +12,14 @@ use Illuminate\Support\Facades\URL;
 class PostController extends Controller
 {
     protected $postModel;
+    protected $categoryModel;
+    protected $tagModel;
     
-    public function __construct(PostRepositoryInterface $postModel)
+    public function __construct(PostRepositoryInterface $postModel, CategoryRepositoryInterface $categoryModel, TagRepositoryInterface $tagModel)
     {
         $this->postModel = $postModel;
+        $this->categoryModel = $categoryModel;
+        $this->tagModel = $tagModel;
     }
 
     /**
@@ -28,24 +31,17 @@ class PostController extends Controller
     public function index(Request $request)
     {
         if (URL::current() == route('my-post')) {
-            $posts = Post::where('user_id', Auth::user()->id);
+            $posts = $this->postModel->where(['user_id' => Auth::user()->id]);
             $title = 'Мои посты';
         } elseif (URL::current() == route('popular-post')) {
-            $posts = Post::orderBy('likes', 'desc');
+            $posts = $this->postModel->orderBy('views', 'desc');
             $title = 'Популярные посты';
         } elseif (URL::current() == route('without-comment-post')) {
-            $posts = Post::select('posts.*')
-                ->selectRaw('count(comments.post_id) as counter')
-                ->leftJoin(\DB::raw('comments'), function ($join) {
-                    $join->on('comments.post_id', '=', 'posts.id');
-                })
-                ->groupBy('posts.id')
-                ->having('counter', 0);
-
+            $posts = $this->postModel->postsWithoutComment();
             $title = 'Посты без комментариев';
         } else {
             if ($request->has('tag')) {
-                $tag = Tag::where('name', $request->tag)->first()->posts;
+                $tag = $this->postModel->getPostsWithExistTag($request->tag);
             } else {
                 $posts = $this->postModel->instance();
             }
@@ -67,10 +63,11 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::find($id)->first();
+        $post = $this->postModel->getPost($id);
 
         $post->views = $post->views + 1;
-        $post->save();
+
+        $post = $this->postModel->save($post);
 
         return view('post-show', [
             'post' => $post
@@ -96,20 +93,20 @@ class PostController extends Controller
     public function createPost(Request $request)
     {
         $tags = json_decode($request->tag);
-        $model = new Post;
-        $category = Category::firstOrCreate(['name' => $request->category_name]);
+        $model = $this->postModel->instance();
+        $category = $this->categoryModel->firstOrCreate(['name' => $request->category_name]);
 
         $array = array_merge($request->all(), ['category_id' => $category->id]);
 
-        $model->fill($array);
-        $model->save();
+        $model = $this->postModel->fill($model, $array);
+        $model = $this->postModel->save($model);
 
         $tagModel = [];
         foreach ($tags as $tag) {
-            $tagModel[] = Tag::firstOrCreate(['name' => $tag])->id;
+            $tagModel[] = $this->tagModel->firstOrCreate(['name' => $tag])->id;
         }
 
-        $model->tags()->sync($tagModel);
+        $this->postModel->attachTags($model, $tagModel);
 
         return redirect()->back()->withSuccess('Пост создан успешно');
     }
@@ -127,10 +124,11 @@ class PostController extends Controller
             return redirect()->route('index')->withErrors(['Не жульничай, не твой пост']);
         }
 
-        $model = Post::where([
+        $model = $this->postModel->where([
             'id' => $post_id,
             'user_id' => $user_id
-        ])->first();
+        ]);
+        $model = $this->postModel->first($model);
 
         return view('update-post', [
             'post' => $model
@@ -150,23 +148,25 @@ class PostController extends Controller
         }
 
         $tags = json_decode($request->tag);
-        $category = Category::firstOrCreate(['name' => $request->category_name]);
+        $category = $this->categoryModel->firstOrCreate(['name' => $request->category_name]);
         $array = array_merge($request->all(), ['category_id' => $category->id]);
 
-        $model = Post::where([
+        $model = $this->postModel->where([
             'id' => $request->post_id,
             'user_id' => $request->user_id
-        ])->first();
+        ]);
+        $model = $this->postModel->first($model);
 
-        $model->fill($array);
-        $model->save();
+        $model = $this->postModel->fill($model, $array);
+        $model = $this->postModel->save($model);
         
-        $tagModel = [];
-        foreach ($tags as $tag) {
-            $tagModel[] = Tag::firstOrCreate(['name' => $tag])->id;
+        if (isset($tags)) {
+            $tagModel = [];
+            foreach ($tags as $tag) {
+                $tagModel[] = $this->tagModel->firstOrCreate(['name' => $tag])->id;
+            }
+            $this->postModel->attachTags($model, $tagModel);
         }
-
-        $model->tags()->sync($tagModel);
 
         return redirect()->back()->withSuccess('Пост успешно обновлен');
     }

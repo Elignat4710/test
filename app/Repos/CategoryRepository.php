@@ -8,10 +8,7 @@ use App\Repos\Interfaces\CategoryRepositoryInterface;
 
 class CategoryRepository extends AbstractRepository implements CategoryRepositoryInterface
 {
-    public function __construct()
-    {
-        parent::__construct(new Category());
-    }
+    protected $class = Category::class;
     
     public function search(string $search)
     {

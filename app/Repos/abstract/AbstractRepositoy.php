@@ -8,9 +8,16 @@ abstract class AbstractRepository
 {
     protected $model;
 
-    public function __construct(Model $model)
+    public function __construct()
     {
-        $this->model = $model;
+        $this->init();
+    }
+
+    public function init()
+    {
+        if ($this->class) {
+            return $this->model = new $this->class;
+        }
     }
 
     public function selfModel()

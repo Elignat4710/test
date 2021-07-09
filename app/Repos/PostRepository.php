@@ -10,10 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class PostRepository extends AbstractRepository implements PostRepositoryInterface
 {
-    public function __construct()
-    {
-        parent::__construct(new Post);
-    }
+    protected $class = Post::class;
 
     public function postsWithoutComment()
     {

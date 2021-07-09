@@ -3,10 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Repos\CommentRepository;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    protected $commentModel;
+
+    public function __construct(CommentRepository $commentModel)
+    {
+        $this->commentModel = $commentModel;
+    }
+    
     /**
      * Создание коммента
      *
@@ -15,11 +23,10 @@ class CommentController extends Controller
      */
     public function create(Request $request)
     {
-        $model = new Comment;
+        $model = $this->commentModel->selfModel();
+        $model = $this->commentModel->fill($model, $request->all());
+        $this->commentModel->save($model);
 
-        $model->fill($request->all());
-        $model->save();
-
-        return redirect()->back()->withSuccess('Комментарий создан');
+        return redirect()->back()->withSuccess('Коммент создан');
     }
 }

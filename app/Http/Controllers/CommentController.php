@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
 use App\Repos\CommentRepository;
 use Illuminate\Http\Request;
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repos\Interfaces\TagRepositoryInterface;
@@ -106,8 +107,10 @@ class PostController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function createPost(Request $request)
+    public function createPost(CreatePostRequest $request)
     {
+        $request->validated();
+        
         $tags = json_decode($request->tag);
         $model = $this->postModel->selfModel();
         $category = $this->categoryModel->firstOrCreate(['name' => $request->category_name]);

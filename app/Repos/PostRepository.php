@@ -4,41 +4,22 @@ namespace App\Repos;
 
 use App\Models\Tag;
 use App\Models\Post;
+use App\Repos\AbstractClass\AbstractRepository;
 use App\Repos\Interfaces\PostRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
-class PostRepository implements PostRepositoryInterface
+class PostRepository extends AbstractRepository implements PostRepositoryInterface
 {
-    public function instance()
+    public function __construct()
     {
-        return new Post;
-    }
-
-    public function getPost($id)
-    {
-        return Post::find($id);
-    }
-
-    public function save($post)
-    {
-        $post->save();
-        return $post->refresh();
-    }
-
-    public function where(array $options)
-    {
-        return Post::where($options);
-    }
-
-    public function orderBy($field, $sort)
-    {
-        return Post::orderBy($field, $sort);
+        parent::__construct(new Post);
     }
 
     public function postsWithoutComment()
     {
-        return Post::select('posts.*')
+        return $this->model::select('posts.*')
             ->selectRaw('count(comments.post_id) as counter')
-            ->leftJoin(\DB::raw('comments'), function ($join) {
+            ->leftJoin(DB::raw('comments'), function ($join) {
                 $join->on('comments.post_id', '=', 'posts.id');
             })
             ->groupBy('posts.id')
@@ -50,18 +31,8 @@ class PostRepository implements PostRepositoryInterface
         return Tag::where('name', $tagName)->first()->posts;
     }
 
-    public function fill(Post $model, array $array)
-    {
-        return $model->fill($array);
-    }
-
     public function attachTags(Post $model, array $tags)
     {
         return $model->tags()->sync($tags);
-    }
-
-    public function first($model)
-    {
-        return $model->first();
     }
 }

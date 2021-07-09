@@ -3,12 +3,18 @@
 namespace App\Repos;
 
 use App\Models\Tag;
+use App\Repos\AbstractClass\AbstractRepository;
 use App\Repos\Interfaces\TagRepositoryInterface;
 
-class TagRepository implements TagRepositoryInterface
+class TagRepository extends AbstractRepository implements TagRepositoryInterface
 {
-    public function firstOrCreate(array $options)
+    public function __construct()
     {
-        return Tag::firstOrCreate($options);
+        parent::__construct(new Tag());
+    }
+
+    public function search(string $search)
+    {
+        return $this->model->search($search);
     }
 }

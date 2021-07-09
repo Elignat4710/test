@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 namespace App\Repos\Interfaces;
 
 interface TagRepositoryInterface
 {
-    public function firstOrCreate(array $options);
+    public function search(string $search);
 }

@@ -3,12 +3,18 @@
 namespace App\Repos;
 
 use App\Models\Category;
+use App\Repos\AbstractClass\AbstractRepository;
 use App\Repos\Interfaces\CategoryRepositoryInterface;
 
-class CategoryRepository implements CategoryRepositoryInterface
+class CategoryRepository extends AbstractRepository implements CategoryRepositoryInterface
 {
-    public function firstOrCreate(array $options)
+    public function __construct()
     {
-        return Category::firstOrCreate($options);
+        parent::__construct(new Category());
+    }
+    
+    public function search(string $search)
+    {
+        return $this->model->search($search);
     }
 }

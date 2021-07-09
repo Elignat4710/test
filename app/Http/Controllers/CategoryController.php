@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Repos\CategoryRepository;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    protected $categoryModel;
+
+    public function __construct(CategoryRepository $categoryModel)
+    {
+        $this->categoryModel = $categoryModel;
+    }
+    
     /**
      * Найти категорию
      *
@@ -15,8 +22,11 @@ class CategoryController extends Controller
      */
     public function getCategory(Request $request)
     {
+        $model = $this->categoryModel->search($request->search);
+        $model = $this->categoryModel->get($model);
+
         return response()->json([
-            'models' => Category::search($request->search)->get()
+            'models' => $model
         ]);
     }
 }

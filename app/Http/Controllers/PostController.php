@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Repos\Interfaces\CategoryRepositoryInterface;
-use App\Repos\Interfaces\PostRepositoryInterface;
-use App\Repos\Interfaces\TagRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\URL;
+use App\Repos\Interfaces\TagRepositoryInterface;
+use App\Repos\Interfaces\PostRepositoryInterface;
+use App\Repos\Interfaces\CategoryRepositoryInterface;
 
 class PostController extends Controller
 {
@@ -22,36 +21,53 @@ class PostController extends Controller
         $this->tagModel = $tagModel;
     }
 
-    /**
-     * Показ главной страницы, с разными параметрами
-     *
-     * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    public function index(Request $request)
+    public function allPosts(Request $request)
     {
-        if (URL::current() == route('my-post')) {
-            $posts = $this->postModel->where(['user_id' => Auth::user()->id]);
-            $title = 'Мои посты';
-        } elseif (URL::current() == route('popular-post')) {
-            $posts = $this->postModel->orderBy('views', 'desc');
-            $title = 'Популярные посты';
-        } elseif (URL::current() == route('without-comment-post')) {
-            $posts = $this->postModel->postsWithoutComment();
-            $title = 'Посты без комментариев';
+        if ($request->has('tag')) {
+            $model = $this->postModel->getPostsWithExistTag($request->tag);
         } else {
-            if ($request->has('tag')) {
-                $tag = $this->postModel->getPostsWithExistTag($request->tag);
-            } else {
-                $posts = $this->postModel->instance();
-            }
-            $title = 'Все посты';
+            $model = $this->postModel->selfModel();
         }
+        
+        return view('index', [
+            'posts' => $this->postModel->paginate($model),
+            'title' => 'Все посты',
+            'count' => $this->postModel->count($model)
+        ]);
+    }
+
+    public function myPost()
+    {
+        $model = $this->postModel->where([
+            'user_id' => Auth::user()->id
+        ]);
 
         return view('index', [
-            'posts' => isset($tag) ? $tag : $posts->paginate(15),
-            'title' => $title,
-            'count' => isset($tag) ? $tag->count() : $posts->count()
+            'posts' => $this->postModel->paginate($model),
+            'title' => 'Мои посты',
+            'count' => $this->postModel->count($model)
+        ]);
+    }
+
+    public function popularPosts()
+    {
+        $model = $this->postModel->orderBy('views', 'desc');
+
+        return view('index', [
+            'posts' => $this->postModel->paginate($model),
+            'title' => 'Популярные посты',
+            'count' => $this->postModel->count($model)
+        ]);
+    }
+
+    public function postsWithoutComments()
+    {
+        $model = $this->postModel->postsWithoutComment();
+
+        return view('index', [
+            'posts' => $this->postModel->paginate($model),
+            'title' => 'Посты без комментариев',
+            'count' => $this->postModel->count($model)
         ]);
     }
 
@@ -63,7 +79,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = $this->postModel->getPost($id);
+        $post = $this->postModel->find($id);
 
         $post->views = $post->views + 1;
 
@@ -93,7 +109,7 @@ class PostController extends Controller
     public function createPost(Request $request)
     {
         $tags = json_decode($request->tag);
-        $model = $this->postModel->instance();
+        $model = $this->postModel->selfModel();
         $category = $this->categoryModel->firstOrCreate(['name' => $request->category_name]);
 
         $array = array_merge($request->all(), ['category_id' => $category->id]);

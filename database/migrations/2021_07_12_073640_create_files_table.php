@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddAvatarColumnToUsersTable extends Migration
+class CreateFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class AddAvatarColumnToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('avatar')->default(null)->nullable();
+        Schema::create('files', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->string('name');
+            
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ class AddAvatarColumnToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('avatar');
-        });
+        Schema::dropIfExists('files');
     }
 }

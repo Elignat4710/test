@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(CreateDefaultImg::class);
         $this->call(CreateAnonimUser::class);
     }
 }

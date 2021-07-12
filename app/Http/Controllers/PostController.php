@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
+use App\Repos\FileRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repos\Interfaces\TagRepositoryInterface;
@@ -14,12 +15,18 @@ class PostController extends Controller
     protected $postModel;
     protected $categoryModel;
     protected $tagModel;
+    protected $fileModel;
     
-    public function __construct(PostRepositoryInterface $postModel, CategoryRepositoryInterface $categoryModel, TagRepositoryInterface $tagModel)
-    {
+    public function __construct(
+        PostRepositoryInterface $postModel,
+        CategoryRepositoryInterface $categoryModel,
+        TagRepositoryInterface $tagModel,
+        FileRepository $fileModel
+    ) {
         $this->postModel = $postModel;
         $this->categoryModel = $categoryModel;
         $this->tagModel = $tagModel;
+        $this->fileModel = $fileModel;
     }
 
     public function allPosts(Request $request)
@@ -86,8 +93,13 @@ class PostController extends Controller
 
         $post = $this->postModel->save($post);
 
+        // $comments = $post->comments->groupBy('parent_id');
+
+        // dd($comments);
+
         return view('post-show', [
-            'post' => $post
+            'post' => $post,
+            // 'comments' => $comments
         ]);
     }
 
@@ -115,7 +127,19 @@ class PostController extends Controller
         $model = $this->postModel->selfModel();
         $category = $this->categoryModel->firstOrCreate(['name' => $request->category_name]);
 
-        $array = array_merge($request->all(), ['category_id' => $category->id]);
+        if ($request->hasFile('photo')) {
+            $file = $this->fileModel->create([
+                'name' => $request->file('photo')->store('posts', 'public')
+            ]);
+        }
+
+        $array = array_merge(
+            $request->all(),
+            [
+                'category_id' => $category->id,
+                'file_id' => isset($file) ? $file->id : 2
+            ]
+        );
 
         $model = $this->postModel->fill($model, $array);
         $model = $this->postModel->save($model);
@@ -168,13 +192,32 @@ class PostController extends Controller
 
         $tags = json_decode($request->tag);
         $category = $this->categoryModel->firstOrCreate(['name' => $request->category_name]);
-        $array = array_merge($request->all(), ['category_id' => $category->id]);
 
         $model = $this->postModel->where([
             'id' => $request->post_id,
             'user_id' => $request->user_id
         ]);
         $model = $this->postModel->first($model);
+
+        if ($request->hasFile('photo')) {
+            $file = $this->fileModel->create([
+                'name' => $request->file('photo')->store('posts', 'public')
+            ]);
+
+            $model = $this->postModel->update($model, [
+                'file_id' => $file->id
+            ]);
+        } else {
+            $file = $model->file;
+        }
+
+        $array = array_merge(
+            $request->all(),
+            [
+                'category_id' => $category->id,
+                'file_id' => $file->id
+            ]
+        );
 
         $model = $this->postModel->fill($model, $array);
         $model = $this->postModel->save($model);

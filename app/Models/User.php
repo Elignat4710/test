@@ -20,6 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'file_id'
     ];
 
     /**
@@ -44,5 +45,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function posts()
     {
         return $this->hasMany(Post::class, 'user_id');
+    }
+
+    public function file()
+    {
+        return $this->belongsTo(File::class);
     }
 }

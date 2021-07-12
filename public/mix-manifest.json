@@ -6,5 +6,7 @@
     "/js/update-post.js": "/js/update-post.js",
     "/css/app.css": "/css/app.css",
     "/css/profile.css": "/css/profile.css",
-    "/image/default.jpg": "/image/default.jpg"
+    "/image/default.jpg": "/image/default.jpg",
+    "/image/unkown.png": "/image/unkown.png",
+    "/image/unknown.png": "/image/unknown.png"
 }

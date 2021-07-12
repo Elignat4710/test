@@ -71,7 +71,7 @@
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 <img
-                                    src="{{ isset(Auth::user()->avatar) ? '/storage/' . Auth::user()->avatar : 'image/default.jpg' }}"
+                                    src="{{ Auth()->user()->file_id == 1 ? Auth()->user()->file->name : '/storage/' . Auth()->user()->file->name }}"
                                     alt=""
                                     class="rounded-circle"
                                     width="20"

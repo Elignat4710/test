@@ -5,7 +5,15 @@
         <div class="col-md-5 mx-auto">
             <div class="bg-white shadow rounded overflow-hidden">
                 <div class="px-4 pt-4 pb-4 cover">
-                    <h1 class="font-italic mb-0 text-center">{{ $post->title }}</h1>
+                    <h1 class="font-italic mb-0 text-center">
+                        <img 
+                            class="rounded-circle"
+                            width="100"
+                            height="100" 
+                            src="{{ $post->file_id == 2 ? Request::segment(0) . '/' . $post->file->name : '/storage/' . $post->file->name }}" 
+                            alt="">
+                        {{ $post->title }}
+                    </h1>
                     <p>{{ $post->body }}</p>
                     <div class="row mt-2 align-items-end">
                         <div class="col-md-6">
@@ -61,12 +69,20 @@
 
                     <h3 class="font-italic mb-0 text-center">Комменты к посту</h3>
 
-                    @foreach($post->comments as $comment)
+                    @include('comments', ['comments' => $post->comments])
+                    {{-- @foreach($post->comments as $comment )
+                        {{ $comment->id }}
+
+                        @if ($comment->children->count() > 0)
+                            @include('comment', ['comment' => $comment->children])
+                        @endif
                         <div class="p-4 rounded shadow-sm bg-light mt-4">
                             <small>Автор: {{ $comment->user->name }}</small>
                             <p class="font-italic mb-0 row body-post overflow-hidden">{{ $comment->body }}</p>
+                            <small class="float-right"><a href="#" data-comment_id="{{ $comment->id }}">Прокомментировать</a></small>
                         </div>
-                    @endforeach
+
+                    @endforeach --}}
                 </div>
             </div>
         </div>

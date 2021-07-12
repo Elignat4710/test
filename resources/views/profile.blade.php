@@ -12,7 +12,7 @@
                     <div class="media align-items-end profile-head">
                         <div class="profile mr-3">
                             <img
-                                src="{{isset(Auth::user()->avatar) ? '/storage/' . Auth::user()->avatar : 'image/default.jpg'}}"
+                                src="{{ Auth()->user()->file_id == 1 ? Auth()->user()->file->name : '/storage/' . Auth()->user()->file->name }}"
                                 alt="..." width="130" class="rounded mb-2 img-thumbnail"
                             >
                             <form id="form-edit-photo">

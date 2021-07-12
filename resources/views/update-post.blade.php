@@ -11,7 +11,7 @@
                             <h4><i class="icon fa fa-check"></i>{{ session('success') }}</h4>
                         </div>
                     @endif
-                    <form method="post" action="{{ route('update-post') }}">
+                    <form method="post" action="{{ route('update-post') }}" enctype="multipart/form-data">
                         @method('patch')
                         @csrf
                         <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
@@ -50,6 +50,13 @@
 
                         <datalist id="tags-name">
                         </datalist>
+
+                        <div class="form-group">
+                            <label for="photo">Фото</label>
+                            <input type="file" class="form-control" id="photo"
+                                   name="photo">
+                        </div>
+
 
                         <button type="submit" class="btn btn-primary">Обновить пост</button>
                     </form>

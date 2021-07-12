@@ -31,7 +31,15 @@
                     <h2 class="text-center">{{ $title }}: {{ $count }}</h2>
                     @foreach($posts as $post)
                         <div class="p-4 rounded shadow-sm bg-light mt-4">
-                            <h3 class="font-italic mb-0 text-center">{{ $post->title }}</h3>
+                            <h3 class="font-italic mb-0 text-center">
+                                <img 
+                                    class="rounded-circle"
+                                    width="50"
+                                    height="50" 
+                                    src="{{ $post->file_id == 2 ? $post->file->name : '/storage/' . $post->file->name }}" 
+                                    alt="">
+                                {{ $post->title }}
+                            </h3>
                             <p class="font-italic mb-0 row body-post overflow-hidden">{{ $post->body }}</p>
                             <div class="row mt-2 align-items-end">
                                 <div class="col-md-6">

@@ -2,8 +2,6 @@
 
 namespace App\Repos\AbstractClass;
 
-use Illuminate\Database\Eloquent\Model;
-
 abstract class AbstractRepository
 {
     protected $model;
@@ -79,5 +77,22 @@ abstract class AbstractRepository
     public function firstOrCreate(array $options)
     {
         return $this->model->firstOrCreate($options);
+    }
+
+    public function create(array $options)
+    {
+        return $this->model->create($options);
+    }
+
+    public function update($model, array $options)
+    {
+        $model->update($options);
+
+        return $model->refresh();
+    }
+
+    public function with($model, string $relation)
+    {
+        return $model->with($relation);
     }
 }

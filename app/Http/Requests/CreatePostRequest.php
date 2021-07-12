@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreatePostRequest extends FormRequest
@@ -26,14 +27,16 @@ class CreatePostRequest extends FormRequest
         return [
             'title' => 'required',
             'body' => 'required',
-            'category_name' => 'required'
+            'category_name' => 'required',
+            'photo' => 'mimes:jpeg,jpg,png'
         ];
     }
 
     public function messages()
     {
         return [
-            'required' => ':attribute обязательное поле для заполнения'
+            'required' => ':attribute обязательное поле для заполнения',
+            'mimes' => ':attribute должно быть в формате jpeg, jpg, png'
         ];
     }
 
@@ -42,7 +45,8 @@ class CreatePostRequest extends FormRequest
         return [
             'title' => '"Заголовок"',
             'body' => '"Тело поста"',
-            'category_name' => '"Категория"'
+            'category_name' => '"Категория"',
+            'photo' => '"Фото"'
         ];
     }
 }

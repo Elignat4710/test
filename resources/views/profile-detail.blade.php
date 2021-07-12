@@ -12,7 +12,7 @@
                     <div class="media align-items-end profile-head">
                         <div class="profile mr-3">
                             <img
-                                src="{{ $user->avatar == null ? '/image/default.jpg' : '/storage/' . $user->avatar }}"
+                                src="{{ $user->file_id == 1 ? $user->file->name : '/storage/' . $user->file->name }}"
                                 alt="..." width="130" class="rounded mb-2 img-thumbnail"
                             >
                         </div>

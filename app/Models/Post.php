@@ -13,7 +13,8 @@ class Post extends Model
         'user_id',
         'title',
         'body',
-        'category_id'
+        'category_id',
+        'file_id'
     ];
 
     public function user()
@@ -23,7 +24,7 @@ class Post extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(Comment::class)->where('parent_id', null);
     }
 
     public function tags()
@@ -34,5 +35,10 @@ class Post extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function file()
+    {
+        return $this->belongsTo(File::class, 'file_id');
     }
 }

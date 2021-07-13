@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
+use App\Models\Comment;
 use App\Repos\FileRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -93,13 +94,11 @@ class PostController extends Controller
 
         $post = $this->postModel->save($post);
 
-        // $comments = $post->comments->groupBy('parent_id');
-
-        // dd($comments);
+        $comments = $post->comments;
 
         return view('post-show', [
             'post' => $post,
-            // 'comments' => $comments
+            'comments' => $comments
         ]);
     }
 

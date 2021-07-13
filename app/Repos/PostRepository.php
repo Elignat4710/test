@@ -4,9 +4,9 @@ namespace App\Repos;
 
 use App\Models\Tag;
 use App\Models\Post;
-use App\Repos\AbstractClass\AbstractRepository;
 use App\Repos\Interfaces\PostRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use App\Repos\AbstractClass\AbstractRepository;
 
 class PostRepository extends AbstractRepository implements PostRepositoryInterface
 {

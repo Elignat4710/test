@@ -21,7 +21,7 @@ abstract class AbstractRepository
     public function init()
     {
         if ($this->class) {
-            return $this->model = new $this->class;
+            return $this->model = app()->make($this->class);
         }
     }
 

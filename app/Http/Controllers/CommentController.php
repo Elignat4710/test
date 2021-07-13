@@ -14,7 +14,7 @@ class CommentController extends Controller
     {
         $this->commentModel = $commentModel;
     }
-    
+
     /**
      * Создание коммента
      *
@@ -24,7 +24,7 @@ class CommentController extends Controller
     public function create(CommentRequest $request)
     {
         $request->validated();
-        
+
         $model = $this->commentModel->selfModel();
         $model = $this->commentModel->fill($model, $request->all());
         $this->commentModel->save($model);
@@ -32,6 +32,12 @@ class CommentController extends Controller
         return redirect()->back()->withSuccess('Коммент создан');
     }
 
+    /**
+     * Получить определенный коммент
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getComment($id)
     {
         $model = $this->commentModel->find($id);

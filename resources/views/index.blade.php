@@ -32,11 +32,11 @@
                     @foreach($posts as $post)
                         <div class="p-4 rounded shadow-sm bg-light mt-4">
                             <h3 class="font-italic mb-0 text-center">
-                                <img 
+                                <img
                                     class="rounded-circle"
                                     width="50"
-                                    height="50" 
-                                    src="{{ $post->file_id == 2 ? $post->file->name : '/storage/' . $post->file->name }}" 
+                                    height="50"
+                                    src="{{ $post->file_id == 2 ? $post->file->name : '/storage/' . $post->file->name }}"
                                     alt="">
                                 {{ $post->title }}
                             </h3>

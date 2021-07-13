@@ -13,7 +13,7 @@ class CategoryController extends Controller
     {
         $this->categoryModel = $categoryModel;
     }
-    
+
     /**
      * Найти категорию
      *

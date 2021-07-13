@@ -12,13 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     let input = document.querySelector('#tag'),
-        tagify = new Tagify (input, {
+        tagify = new Tagify(input, {
             originalInputValueFormat: valuesArr => valuesArr.map(item => item.value),
-            whitelist : [],
+            whitelist: [],
             maxTags: 5,
         }),
         controller
 
+    // Автосаджест для тегов
     tagify.on('input', (e) => {
         let value = e.detail.value
         tagify.whitelist = []

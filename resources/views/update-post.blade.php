@@ -13,7 +13,7 @@
                     @endif
 
                     @include('error-validate')
-                    
+
                     <form method="post" action="{{ route('update-post') }}" enctype="multipart/form-data" novalidate>
                         @method('patch')
                         @csrf
@@ -43,22 +43,10 @@
                             @if (!$post->tags->isEmpty())
                                 <input id="post-tags" type="hidden" value="{{ $post->tags }}">
                             @endif
-                            
+
                             <label for="tag">Теги</label>
                             <input name="tags" id="tag" class="form-control" placeholder="Вводите теги ...">
                         </div>
-
-                        {{-- <div class="form-group">
-                            <label for="tag">Теги</label>
-                            <input type="text" class="form-control" list="tags-name" id="tag"
-                                   autocomplete="off">
-                            <input type="hidden" name="tag" id="array-tag" required>
-                            <div id="tags-list">
-                                @foreach($post->tags as $tag)
-                                    <span class="badge badge-pill badge-success mr-1">{{ $tag->name }}</span>
-                                @endforeach
-                            </div>
-                        </div> --}}
 
                         <datalist id="tags-name">
                         </datalist>

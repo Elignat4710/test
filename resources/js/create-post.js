@@ -3,13 +3,14 @@ import axios from 'axios'
 
 document.addEventListener('DOMContentLoaded', () => {
     let input = document.querySelector('#tag'),
-        tagify = new Tagify (input, {
+        tagify = new Tagify(input, {
             originalInputValueFormat: valuesArr => valuesArr.map(item => item.value),
-            whitelist : [],
+            whitelist: [],
             maxTags: 5,
         }),
         controller
 
+    // автосаджест для поисков тегов
     tagify.on('input', (e) => {
         let value = e.detail.value
         tagify.whitelist = []
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tagify.loading(false).dropdown.show(value)
             })
     })
-    
+
     // Автосаджест для поля "category"
     document.getElementById('category').addEventListener('input', (e) => {
         let dataList = document.getElementById('category_name')

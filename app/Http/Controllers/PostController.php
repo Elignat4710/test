@@ -16,19 +16,26 @@ class PostController extends Controller
     protected $categoryModel;
     protected $tagModel;
     protected $fileModel;
-    
+
     public function __construct(
         PostRepositoryInterface $postModel,
         CategoryRepositoryInterface $categoryModel,
         TagRepositoryInterface $tagModel,
         FileRepository $fileModel
-    ) {
+    )
+    {
         $this->postModel = $postModel;
         $this->categoryModel = $categoryModel;
         $this->tagModel = $tagModel;
         $this->fileModel = $fileModel;
     }
 
+    /**
+     * Получение всех постов и поиск по тегам
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function allPosts(Request $request)
     {
         if ($request->has('tag')) {
@@ -36,7 +43,7 @@ class PostController extends Controller
         } else {
             $model = $this->postModel->selfModel();
         }
-        
+
         return view('index', [
             'posts' => isset($tags) ? $tags : $this->postModel->paginate($model),
             'title' => 'Все посты',
@@ -44,6 +51,11 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * Получить список всех постов авторизированого юзера
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function myPost()
     {
         $model = $this->postModel->where([
@@ -57,6 +69,11 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * Получить список популярных постов
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function popularPosts()
     {
         $model = $this->postModel->orderBy('views', 'desc');
@@ -68,6 +85,11 @@ class PostController extends Controller
         ]);
     }
 
+    /**
+     * Получить все посты без комментов
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function postsWithoutComments()
     {
         $model = $this->postModel->postsWithoutComment();
@@ -89,6 +111,7 @@ class PostController extends Controller
     {
         $post = $this->postModel->find($id);
 
+        // Увеличиваем количество просмотров у поста
         $post->views = $post->views + 1;
 
         $post = $this->postModel->save($post);
@@ -121,7 +144,7 @@ class PostController extends Controller
     public function createPost(CreatePostRequest $request)
     {
         $request->validated();
-        
+
         $tags = $request->tags;
         $model = $this->postModel->selfModel();
         $category = $this->categoryModel->firstOrCreate(['name' => $request->category_name]);
@@ -222,7 +245,7 @@ class PostController extends Controller
 
         $model = $this->postModel->fill($model, $array);
         $model = $this->postModel->save($model);
-        
+
         if (isset($tags)) {
             $tagModel = [];
             foreach ($tags as $tag) {

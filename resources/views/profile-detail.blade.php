@@ -25,7 +25,8 @@
                 <div class="bg-light p-4 d-flex justify-content-end text-center">
                     <ul class="list-inline mb-0">
                         <li class="list-inline-item">
-                            <h5 class="font-weight-bold mb-0 d-block">{{ count($user->posts) }}</h5><small class="text-muted">
+                            <h5 class="font-weight-bold mb-0 d-block">{{ count($user->posts) }}</h5><small
+                                class="text-muted">
                                 <i
                                     class="fas fa-image mr-1"></i>Постов</small>
                         </li>

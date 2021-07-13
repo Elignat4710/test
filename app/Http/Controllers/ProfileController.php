@@ -18,11 +18,12 @@ class ProfileController extends Controller
     public function __construct(
         UserRepository $userModel,
         FileRepository $fileModel
-    ) {
+    )
+    {
         $this->userModel = $userModel;
         $this->fileModel = $fileModel;
     }
-    
+
     /**
      * Профиль авторизированого юзера
      *
@@ -72,7 +73,7 @@ class ProfileController extends Controller
                 $file = File::find($current_file_id);
 
                 Storage::disk('public')->delete($file->name);
-                
+
                 $file->delete();
             }
         }

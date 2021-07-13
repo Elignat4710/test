@@ -14,12 +14,6 @@ class TagController extends Controller
         $this->tagModel = $tagModel;
     }
 
-    /**
-     * Найти теги
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function getTag(Request $request)
     {
         $model = $this->tagModel->search($request->search);

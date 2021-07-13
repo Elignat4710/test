@@ -14,12 +14,6 @@ class CategoryController extends Controller
         $this->categoryModel = $categoryModel;
     }
 
-    /**
-     * Найти категорию
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function getCategory(Request $request)
     {
         $model = $this->categoryModel->search($request->search);

@@ -72,10 +72,10 @@ abstract class AbstractRepository
     /**
      * Пагинация
      *
-     * @param Model $model
+     * @param $model
      * @return mixed
      */
-    public function paginate(Model $model)
+    public function paginate($model)
     {
         return $model->paginate(15);
     }
@@ -83,10 +83,10 @@ abstract class AbstractRepository
     /**
      * Количество записей в коллекции
      *
-     * @param Model $model
+     * @param $model
      * @return mixed
      */
-    public function count(Model $model)
+    public function count($model)
     {
         return $model->count();
     }
@@ -104,10 +104,10 @@ abstract class AbstractRepository
     /**
      * Сохранение модели и возвращение инстанса
      *
-     * @param Model $model
+     * @param $model
      * @return Model
      */
-    public function save(Model $model)
+    public function save($model)
     {
         $model->save();
         return $model->refresh();
@@ -116,11 +116,11 @@ abstract class AbstractRepository
     /**
      * Заполнение модели
      *
-     * @param Model $model
+     * @param $model
      * @param array $array
      * @return Model
      */
-    public function fill(Model $model, array $array)
+    public function fill($model, array $array)
     {
         return $model->fill($array);
     }
@@ -131,18 +131,12 @@ abstract class AbstractRepository
      * @param Model $model
      * @return mixed
      */
-    public function first(Model $model)
+    public function first($model)
     {
         return $model->first();
     }
 
-    /**
-     * Получение записей
-     *
-     * @param Model $model
-     * @return mixed
-     */
-    public function get(Model $model)
+    public function get($model)
     {
         return $model->get();
     }
@@ -176,7 +170,7 @@ abstract class AbstractRepository
      * @param array $options
      * @return Model
      */
-    public function update(Model $model, array $options)
+    public function update($model, array $options)
     {
         $model->update($options);
 
@@ -190,7 +184,7 @@ abstract class AbstractRepository
      * @param string $relation
      * @return mixed
      */
-    public function with(Model $model, string $relation)
+    public function with($model, string $relation)
     {
         return $model->with($relation);
     }

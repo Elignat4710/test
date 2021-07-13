@@ -1,3 +1,6 @@
+import Tagify from '@yaireo/tagify'
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const tagsName = []
 
@@ -8,31 +11,49 @@ document.addEventListener('DOMContentLoaded', () => {
         searchOptions('/search-category', e.target.value, dataList)
     })
 
-    // Автосаджест для поля "tag"
-    document.getElementById('tag').addEventListener('input', (e) => {
-        e.target.value = e.target.value.trim()
+    let input = document.querySelector('#tag'),
+        tagify = new Tagify (input, {
+            originalInputValueFormat: valuesArr => valuesArr.map(item => item.value),
+            whitelist : [],
+            maxTags: 5,
+        }),
+        controller
 
-        let dataList = document.getElementById('tags-name')
+    tagify.on('input', (e) => {
+        let value = e.detail.value
+        tagify.whitelist = []
 
-        searchOptions('/search-tag', e.target.value, dataList)
+        controller && controller.abort()
+        controller = new AbortController
+
+        tagify.loading(true).dropdown.hide()
+
+        axios.get('/search-tag', {
+            params: {
+                search: value
+            }
+        })
+            .then((data) => {
+                let newWhiteList = []
+
+                data.data.models.forEach(element => {
+                    newWhiteList.push(element.name)
+                });
+
+                tagify.whitelist = newWhiteList
+                tagify.loading(false).dropdown.show(value)
+            })
     })
 
-    // Приминения тегов через пробел и сохранения их в отдельный инпут
-    document.getElementById('tag').addEventListener('keydown', (e) => {
-        if (e.code === 'Space' && e.target.value.length != 0) {
-            tagsName.push(e.target.value)
-            let arrayTag = document.getElementById('array-tag')
-            arrayTag.value = ''
-            arrayTag.value = JSON.stringify(tagsName)
+    if (document.querySelector('#post-tags')) {
+        let postTags = document.querySelector('#post-tags')
 
-            let tagsList = document.getElementById('tags-list')
-            let string = `<span class="badge badge-pill badge-success mr-1">${e.target.value}</span>`
+        postTags = JSON.parse(postTags.getAttribute('value'))
 
-            e.target.value = ''
-
-            tagsList.insertAdjacentHTML('afterend', string)
-        }
-    })
+        postTags.forEach(element => {
+            tagify.addTags([element.name])
+        });
+    }
 }, true)
 
 // установка опция на дата лист

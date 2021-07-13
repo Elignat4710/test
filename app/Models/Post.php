@@ -24,7 +24,9 @@ class Post extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class)->whereNull('parent_id');
+        return $this->hasMany(Comment::class)
+            ->whereNull('parent_id')
+            ->orderBy('id', 'desc');
     }
 
     public function tags()
@@ -40,5 +42,10 @@ class Post extends Model
     public function file()
     {
         return $this->belongsTo(File::class, 'file_id');
+    }
+
+    public function countPost()
+    {
+        return $this->hasMany(Comment::class)->count();
     }
 }

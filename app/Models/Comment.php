@@ -23,11 +23,7 @@ class Comment extends Model
 
     public function children()
     {
-        return $this->hasMany(Comment::class, 'parent_id', 'id');
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class, 'parent_id', 'id');
+        return $this->hasMany(Comment::class, 'parent_id', 'id')
+            ->orderBy('id', 'desc');
     }
 }

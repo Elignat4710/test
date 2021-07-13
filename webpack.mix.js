@@ -19,4 +19,5 @@ mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/posts.js', 'public/js')
     .js('resources/js/create-post.js', 'public/js')
     .js('resources/js/update-post.js', 'public/js')
+    .js('resources/js/comments.js', 'public/js')
     .sourceMaps();

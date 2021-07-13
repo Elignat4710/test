@@ -28,7 +28,8 @@ class CreatePostRequest extends FormRequest
             'title' => 'required',
             'body' => 'required',
             'category_name' => 'required',
-            'photo' => 'mimes:jpeg,jpg,png'
+            'photo' => 'mimes:jpeg,jpg,png',
+            'tags' => 'required|max:5'
         ];
     }
 
@@ -36,7 +37,8 @@ class CreatePostRequest extends FormRequest
     {
         return [
             'required' => ':attribute обязательное поле для заполнения',
-            'mimes' => ':attribute должно быть в формате jpeg, jpg, png'
+            'mimes' => ':attribute должно быть в формате jpeg, jpg, png',
+            'max' => 'Поле ":attribute" должно быть не больше :max'
         ];
     }
 
@@ -46,7 +48,15 @@ class CreatePostRequest extends FormRequest
             'title' => '"Заголовок"',
             'body' => '"Тело поста"',
             'category_name' => '"Категория"',
-            'photo' => '"Фото"'
+            'photo' => '"Фото"',
+            'tags' => '"Теги"'
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'tags' => $this->request->get('tags') == null ? null : explode(',', $this->request->get('tags'))
+        ]);
     }
 }

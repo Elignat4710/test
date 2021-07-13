@@ -4,6 +4,7 @@
     "/js/posts.js": "/js/posts.js",
     "/js/create-post.js": "/js/create-post.js",
     "/js/update-post.js": "/js/update-post.js",
+    "/js/comments.js": "/js/comments.js",
     "/css/app.css": "/css/app.css",
     "/css/profile.css": "/css/profile.css",
     "/image/default.jpg": "/image/default.jpg",

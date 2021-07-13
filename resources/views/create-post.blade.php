@@ -13,16 +13,10 @@
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <h4><i class="icon fa fa-check"></i>{{ session('success') }}</h4>
                 </div>
-                @elseif($errors->any())
-                <div class="alert alert-danger" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
                 @endif
+
+                @include('error-validate')
+                
                 <form method="post" action="{{ route('create-post') }}" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
@@ -47,11 +41,7 @@
 
                     <div class="form-group">
                         <label for="tag">Теги</label>
-                        <input type="text" class="form-control" list="tags-name" id="tag" autocomplete="off">
-                        <input type="hidden" name="tag" id="array-tag">
-                        <div id="tags-list">
-
-                        </div>
+                        <input type="" name="tags" id="tag" class="form-control" placeholder="Вводите теги ...">
                     </div>
 
                     <datalist id="tags-name">

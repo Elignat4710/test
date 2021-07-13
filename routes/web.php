@@ -23,6 +23,7 @@ Route::post('/create-comment', [\App\Http\Controllers\CommentController::class, 
 Route::get('/without-comment-post', [\App\Http\Controllers\PostController::class, 'postsWithoutComments'])->name('without-comment-post');
 Route::get('/search-category', [\App\Http\Controllers\CategoryController::class, 'getCategory'])->name('search-category');
 Route::get('/search-tag', [\App\Http\Controllers\TagController::class, 'getTag'])->name('search-tag');
+Route::get('/get-comment/{id}', [\App\Http\Controllers\CommentController::class, 'getComment']);
 
 // Роуты только для авторизированых пользователей
 Route::group(['middleware' => 'auth'], function () {

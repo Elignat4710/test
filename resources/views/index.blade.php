@@ -55,7 +55,7 @@
                                     @endif
                                     <small><a href="{{ route('show-post', $post->id) }}"
                                               class="mr-3">Просмотреть</a></small>
-                                    <small>{{ $post->comments->count() }}</small>
+                                    <small>{{ $post->countPost() }}</small>
                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chat-dots"
                                          fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd"

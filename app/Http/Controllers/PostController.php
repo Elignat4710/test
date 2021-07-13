@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
-use App\Models\Comment;
 use App\Repos\FileRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,15 +32,15 @@ class PostController extends Controller
     public function allPosts(Request $request)
     {
         if ($request->has('tag')) {
-            $model = $this->postModel->getPostsWithExistTag($request->tag);
+            $tags = $this->postModel->getPostsWithExistTag($request->tag);
         } else {
             $model = $this->postModel->selfModel();
         }
         
         return view('index', [
-            'posts' => $this->postModel->paginate($model),
+            'posts' => isset($tags) ? $tags : $this->postModel->paginate($model),
             'title' => 'Все посты',
-            'count' => $this->postModel->count($model)
+            'count' => isset($tags) ? $this->postModel->count($tags) : $this->postModel->count($model)
         ]);
     }
 
@@ -98,7 +97,8 @@ class PostController extends Controller
 
         return view('post-show', [
             'post' => $post,
-            'comments' => $comments
+            'comments' => $comments,
+            'count' => $post->countPost()
         ]);
     }
 
@@ -122,7 +122,7 @@ class PostController extends Controller
     {
         $request->validated();
         
-        $tags = json_decode($request->tag);
+        $tags = $request->tags;
         $model = $this->postModel->selfModel();
         $category = $this->categoryModel->firstOrCreate(['name' => $request->category_name]);
 
@@ -183,13 +183,15 @@ class PostController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updatePost(Request $request)
+    public function updatePost(CreatePostRequest $request)
     {
         if (Auth::user()->id != $request->user_id) {
             return redirect()->route('index')->withErrors(['Не жульничай, не твой пост']);
         }
 
-        $tags = json_decode($request->tag);
+        $request->validated();
+
+        $tags = $request->tags;
         $category = $this->categoryModel->firstOrCreate(['name' => $request->category_name]);
 
         $model = $this->postModel->where([

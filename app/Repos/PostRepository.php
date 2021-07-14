@@ -14,13 +14,7 @@ class PostRepository extends AbstractRepository implements PostRepositoryInterfa
 
     public function postsWithoutComment()
     {
-        return $this->model::select('posts.*')
-            ->selectRaw('count(comments.post_id) as counter')
-            ->leftJoin(DB::raw('comments'), function ($join) {
-                $join->on('comments.post_id', '=', 'posts.id');
-            })
-            ->groupBy('posts.id')
-            ->having('counter', 0);
+        return $this->model->doesntHave('comments');
     }
 
     public function getPostsWithExistTag($tagName)

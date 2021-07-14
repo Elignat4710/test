@@ -2,7 +2,7 @@
 
 namespace App\Repos\Interfaces;
 
-interface TagRepositoryInterface
+interface TagRepositoryInterface extends AbstractRepositoryInterface
 {
     public function search(string $search);
 }

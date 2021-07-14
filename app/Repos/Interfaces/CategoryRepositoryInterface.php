@@ -2,7 +2,7 @@
 
 namespace App\Repos\Interfaces;
 
-interface CategoryRepositoryInterface
+interface CategoryRepositoryInterface extends AbstractRepositoryInterface
 {
     public function search(string $search);
 }

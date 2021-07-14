@@ -5,7 +5,7 @@ namespace App\Repos\Interfaces;
 use App\Models\Post;
 use App\Models\Tag;
 
-interface PostRepositoryInterface
+interface PostRepositoryInterface extends AbstractRepositoryInterface
 {
     /**
      * Возвращает все посты без комментов
